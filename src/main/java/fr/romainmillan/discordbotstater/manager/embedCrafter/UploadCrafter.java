@@ -1,7 +1,6 @@
 package fr.romainmillan.discordbotstater.manager.embedCrafter;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.SelfUser;
 
 import java.awt.*;
