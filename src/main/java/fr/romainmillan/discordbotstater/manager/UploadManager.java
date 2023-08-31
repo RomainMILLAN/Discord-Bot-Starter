@@ -2,12 +2,13 @@ package fr.romainmillan.discordbotstater.manager;
 
 import fr.romainmillan.discordbotstater.App;
 import fr.romainmillan.discordbotstater.manager.embedCrafter.UploadCrafter;
+import fr.romainmillan.discordbotstater.states.EnvironementState;
 import fr.romainmillan.discordbotstater.states.messages.application.UploadMessages;
 
 public class UploadManager {
 
     public static void sendConnectedMessage() {
-        if(!App.getConfiguration("APP_ENV").equals("PROD") && !App.getConfiguration("APP_ENV").equals("STAGING")){
+        if(App.getEnvironementState() != EnvironementState.PRODUCTION){
             return;
         }
 
@@ -21,24 +22,14 @@ public class UploadManager {
                 )
                 .queue();
 
-        SignalApi.sendSignalPersonnalMessage(
-                String.format(
-                        UploadMessages.SIGNAL_CONNECTED.getMessage(),
-                        App.getJda().getSelfUser().getName()
-                )
-        );
+        DiscordWebhookApi.sendConnectedNotification();;
     }
     public static void sendDisconnectmessage() {
-        if(!App.getConfiguration("APP_ENV").equals("PROD") && !App.getConfiguration("APP_ENV").equals("STAGING")){
+        if(App.getEnvironementState() != EnvironementState.PRODUCTION){
             return;
         }
 
-        SignalApi.sendSignalPersonnalMessage(
-                String.format(
-                        UploadMessages.SIGNAL_DISCONNECTED.getMessage(),
-                        App.getJda().getSelfUser().getName()
-                )
-        );
+        DiscordWebhookApi.sendDisconnectedNotification();
     }
 
 }

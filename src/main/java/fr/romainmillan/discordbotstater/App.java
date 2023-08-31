@@ -18,8 +18,6 @@ public class App
 {
     private static Configuration configuration;
     private static JDA jda;
-    private static HashMap<String, String> commands = new HashMap<>();
-
     private static EnvironementState environementState = EnvironementState.PRODUCTION;
     private static boolean debugingState = false;
 
@@ -30,6 +28,9 @@ public class App
 
         if(App.configuration.getConfiguration("APP_ENV").equals("DEVELOP"))
             App.environementState = EnvironementState.DEVELOPMENT;
+
+        if(App.configuration.getConfiguration("APP_ENV").equals("STAGING"))
+            App.environementState = EnvironementState.STAGING;
 
         if(App.configuration.getConfiguration("APP_DEBUGING").equalsIgnoreCase("true"))
             App.debugingState = true;
@@ -50,7 +51,7 @@ public class App
         App.jda = JDABuilder.createDefault(App.configuration.getConfiguration("BOT_TOKEN"))
                 .setIdle(true)
                 .enableCache(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE)
-                .setActivity(Activity.watching(BotMessages.ACTIVITY_PLAYING_BOT.getMessage()))
+                .setActivity(Activity.streaming(BotMessages.ACTIVITY_PLAYING_BOT.getMessage(), "https://romainmillan.fr/"))
                 .enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_PRESENCES)
                 .setEnableShutdownHook(true)
                 .build();
@@ -95,22 +96,5 @@ public class App
 
     public static String getGuildId() {
         return guildId;
-    }
-
-    public static void addCommand(String command, String description) {
-        commands.put(command, description);
-
-        ConsoleManager.getInstance().toConsole(
-                command + " | " +  SystemMessages.PLUGIN_REGISTER_SUCCESS.getMessage(),
-                ConsoleState.DEBUG
-        );
-    }
-
-    public HashMap<String, String> getCommands() {
-        return commands;
-    }
-
-    public static String getDescriptionCommandByCommand(String command) {
-        return commands.get(command);
     }
 }
